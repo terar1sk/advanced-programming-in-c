@@ -4,15 +4,30 @@
 #include <ctype.h>
 #include "bmp.h"
 
-int main() {
+int main(){
     char* reversed = reverse("Hello world!");
-    if (reversed == NULL) {
-        return 1; 
+    if(reversed == NULL){
+        return 1;
     }
-    
     printf("%s\n", reversed);
     free(reversed);
-    return 0;
+
+    
+    char* encrypted;
+    encrypted = vigenere_encrypt("CoMPuTeR", "Hello world!");
+    if(encrypted != NULL){
+        printf("%s\n", encrypted);
+        free(encrypted);
+        return 0;
+    }
+    
+    char* decrypted;
+    decrypted = vigenere_decrypt("CoMPuTeR", "Hello world!");
+    if(decrypted != NULL){
+        printf("%s\n", decrypted);
+        free(decrypted);
+        return 0;
+    }
+    
+    return 1;
 }
-
-
