@@ -26,6 +26,6 @@ playfair.o: playfair.c
 	echo "Building object file playfair.o"
 	$(CC) $(CFLAGS) -c $^ $(LDLIBS) -o $@
 
-clear:
+clean:
 	rm -rf *.o $(OUTPUT)
 
