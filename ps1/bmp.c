@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <stddef.h>
 #include "bmp.h"
 
 
@@ -85,5 +86,38 @@ char* vigenere_decrypt(const char* key, const char* text) {
         }
     }
     decrypted[tl] = '\0';
+    return decrypted;
+}
+
+
+unsigned char* bit_encrypt(const char* text){
+    int ln = strlen(text);
+    unsigned char* encrypted = (unsigned char*)malloc(ln * sizeof(unsigned char));
+    for(int a = 0; a < ln; a++){
+        char cs = text[a];
+        unsigned char first = cs >> 4;
+        unsigned char second = cs & 0x0F;
+        first = ((first & 0x0F) << 4) | ((first & 0xF0) >> 4);
+        encrypted[a] = first ^ second;
+    }
+
+    return encrypted;
+}
+
+char* bit_decrypt(const unsigned char* text){
+    size_t ln = 0;
+    while (text[ln] != '\0') {
+        ln++;
+    }
+    char* decrypted = (char*)malloc(ln + 1);
+    
+    for(int a = 0; a < ln; a++){
+        unsigned char first = text[a];
+        unsigned char second = (first >> 4) ^ (first & 0x0F);
+        first = ((first & 0x0F) << 4) | ((first & 0xF0) >> 4);
+        decrypted[a] = (first << 4) | second;
+    }
+    decrypted[ln] = '\0';
+
     return decrypted;
 }
