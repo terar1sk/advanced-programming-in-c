@@ -25,7 +25,7 @@ char* reverse(const char* text){
 
 
 char* vigenere_encrypt(const char* key, const char* text){
-    if(key == NULL || text == NULL){
+    if(key == NULL || text == NULL || key[0] == '\0' || text[0] == '\0'){
         return NULL;
     }
     int kl = strlen(key);
@@ -35,26 +35,32 @@ char* vigenere_encrypt(const char* key, const char* text){
     if(encrypted == NULL){
         return NULL;
     }
+    
     for(int a = 0, b = 0; a < tl; ++a, ++b){
-        if(b == kl){
-            b = 0;
-        }
-        char key_char = toupper(key[b]) - 'A';
-        char text_char = toupper(text[a]);
-        if(isalpha(text_char)){
-            encrypted[a] = ((text_char - 'A' + key_char) % 26) + 'A';
+    if(b == kl){
+        b = 0;
+    }
+    char key_char = toupper(key[b]);
+    if(isalpha(key_char)){
+        if(isalpha(text[a])){
+            encrypted[a] = ((toupper(text[a]) - 'A' + (key_char - 'A')) % 26) + 'A';
         }
         else{
-            encrypted[a] = text_char; 
+            encrypted[a] = text[a]; 
             --b;
         }
     }
+    else{
+        encrypted[a] = text[a];
+        --b;
+    }
+}
     encrypted[tl] = '\0';
     return encrypted;
 }
 
 char* vigenere_decrypt(const char* key, const char* text) {
-    if(key == NULL || text == NULL){
+    if(key == NULL || text == NULL || key[0] == '\0' || text[0] == '\0'){
         return NULL;
     }
     int kl = strlen(key);
