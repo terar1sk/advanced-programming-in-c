@@ -137,7 +137,7 @@ unsigned char* bmp_encrypt(const char* key, const char* text){
     return bit_encrypted;
 }
 
-char* bmp_decrypt(const char* key, const unsigned char* text) {
+char* bmp_decrypt(const char* key, const unsigned char* text){
     char* bit_decrypted = bit_decrypt(text);
     if(bit_decrypted == NULL){
         return NULL;
