@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stddef.h>
 #include "bmp.h"
-
 
 char* reverse(const char* text){
     if(text == NULL){
@@ -121,3 +119,38 @@ char* bit_decrypt(const unsigned char* text){
 
     return decrypted;
 }
+
+unsigned char* bmp_encrypt(const char* key, const char* text){
+    char* reversed_text = reverse(text);
+    if(reversed_text == NULL){
+        return NULL;
+    }
+    
+    char* vigenere_encrypted = vigenere_encrypt(key, reversed_text);
+    free(reversed_text);
+    if(vigenere_encrypted == NULL){
+        return NULL;
+    }
+
+    unsigned char* bit_encrypted = bit_encrypt(vigenere_encrypted);
+    free(vigenere_encrypted);
+    return bit_encrypted;
+}
+
+char* bmp_decrypt(const char* key, const unsigned char* text) {
+    char* bit_decrypted = bit_decrypt(text);
+    if(bit_decrypted == NULL){
+        return NULL;
+    }
+
+    char* vigenere_decrypted = vigenere_decrypt(key, bit_decrypted);
+    free(bit_decrypted);
+    if(vigenere_decrypted == NULL){
+        return NULL;
+    }
+
+    char* reversed_decrypted = reverse(vigenere_decrypted);
+    free(vigenere_decrypted);
+    return reversed_decrypted;
+}
+
