@@ -5,7 +5,7 @@
 #include "bmp.h"
 
 int main(){
-unsigned char *bmp_encrypted; 
+    unsigned char *bmp_encrypted; 
     char *bmp_decrypted;
     bmp_encrypted = bmp_encrypt("Wow", "Hello world!");
     for(int i=0; i < 12;i++) {

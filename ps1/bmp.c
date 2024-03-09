@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <math.h>
 #include "bmp.h"
 
 char* reverse(const char* text){
@@ -58,7 +59,7 @@ char* vigenere_encrypt(const char* key, const char* text){
     return encrypted;
 }
 
-char* vigenere_decrypt(const char* key, const char* text) {
+char* vigenere_decrypt(const char* key, const char* text){
     if(key == NULL || text == NULL || key[0] == '\0' || text[0] == '\0'){
         return NULL;
     }
@@ -89,43 +90,53 @@ char* vigenere_decrypt(const char* key, const char* text) {
 
 
 unsigned char* bit_encrypt(const char* text){
-    int ln = strlen(text);
-    unsigned char* encrypted = (unsigned char*)malloc(ln * sizeof(unsigned char));
-    for(int a = 0; a < ln; a++){
-        char cs = text[a];
-        unsigned char first = cs >> 4;
-        unsigned char second = cs & 0x0F;
-        first = ((first & 0x0F) << 4) | ((first & 0xF0) >> 4);
-        encrypted[a] = first ^ second;
+   if(text == NULL){
+        return NULL;
+   }
+    unsigned char* encrypted = (unsigned char*)malloc((strlen(text) + 1) * sizeof(unsigned char));
+    if(encrypted == NULL){
+        return NULL;
+    }
+    for(size_t a = 0; a < strlen(text); ++a){
+        unsigned char fst = text[a] >> 4;
+        unsigned char sec = text[a] & 0x0F;
+
+        fst = ((fst & 0x0A) >> 1) | ((fst & 0x05) << 1);
+        encrypted[a] = (fst << 4) ^ sec;
     }
 
     return encrypted;
 }
 
 char* bit_decrypt(const unsigned char* text){
-    size_t ln = 0;
-    while (text[ln] != '\0') {
-        ln++;
+    if(text == NULL){
+        return NULL;
     }
-    char* decrypted = (char*)malloc(ln + 1);
-    
-    for(int a = 0; a < ln; a++){
-        unsigned char first = text[a];
-        unsigned char second = (first >> 4) ^ (first & 0x0F);
-        first = ((first & 0x0F) << 4) | ((first & 0xF0) >> 4);
-        decrypted[a] = (first << 4) | second;
+    char* decrypted = (char*)malloc((strlen((char*)text) + 1) * sizeof(char));
+    if(decrypted == NULL){
+        return NULL;
     }
-    decrypted[ln] = '\0';
+    for(size_t a = 0; a < strlen((char*)text); ++a){
+        unsigned char fst = text[a] >> 4;
+        unsigned char sec = text[a] & 0x0F;
+
+        fst = ((fst & 0x0A) >> 1) | ((fst & 0x05) << 1);
+        decrypted[a] = (fst << 4) ^ sec;
+    }
+
+    decrypted[strlen((char*)text)] = '\0';
 
     return decrypted;
 }
+
+
 
 unsigned char* bmp_encrypt(const char* key, const char* text){
     char* reversed_text = reverse(text);
     if(reversed_text == NULL){
         return NULL;
     }
-    
+
     char* vigenere_encrypted = vigenere_encrypt(key, reversed_text);
     free(reversed_text);
     if(vigenere_encrypted == NULL){
@@ -153,4 +164,3 @@ char* bmp_decrypt(const char* key, const unsigned char* text){
     free(vigenere_decrypted);
     return reversed_decrypted;
 }
-
