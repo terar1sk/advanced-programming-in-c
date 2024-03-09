@@ -36,25 +36,24 @@ char* vigenere_encrypt(const char* key, const char* text){
         return NULL;
     }
     
-    for(int a = 0, b = 0; a < tl; ++a, ++b){
-    if(b == kl){
-        b = 0;
-    }
-    char key_char = toupper(key[b]);
-    if(isalpha(key_char)){
-        if(isalpha(text[a])){
-            encrypted[a] = ((toupper(text[a]) - 'A' + (key_char - 'A')) % 26) + 'A';
+    int keyi = 0;
+    for(int a = 0; a < tl; ++a){
+        char key_char = toupper(key[keyi % kl]);
+        ++keyi;
+        if(isalpha(key_char)){
+            if(isalpha(text[a])){
+                encrypted[a] = ((toupper(text[a]) - 'A' + (key_char - 'A')) % 26) + 'A';
+            }
+            else{
+                encrypted[a] = text[a]; 
+                --keyi;
+            }
         }
         else{
-            encrypted[a] = text[a]; 
-            --b;
+            encrypted[a] = text[a];
+            --keyi;
         }
     }
-    else{
-        encrypted[a] = text[a];
-        --b;
-    }
-}
     encrypted[tl] = '\0';
     return encrypted;
 }
@@ -132,6 +131,10 @@ char* bit_decrypt(const unsigned char* text){
 
 
 unsigned char* bmp_encrypt(const char* key, const char* text){
+    if(key == NULL || text == NULL || key[0] == '\0' || text[0] == '\0'){
+        return NULL;
+    }
+
     char* reversed_text = reverse(text);
     if(reversed_text == NULL){
         return NULL;
@@ -149,6 +152,10 @@ unsigned char* bmp_encrypt(const char* key, const char* text){
 }
 
 char* bmp_decrypt(const char* key, const unsigned char* text){
+    if(key == NULL || text == NULL || key[0] == '\0' || text[0] == '\0'){
+        return NULL;
+    }
+
     char* bit_decrypted = bit_decrypt(text);
     if(bit_decrypted == NULL){
         return NULL;
