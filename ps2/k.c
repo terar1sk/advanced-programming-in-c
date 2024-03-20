@@ -61,7 +61,6 @@ bool is_move_possible(const struct game game){
 }
 
 
-
 bool update(struct game *game, int dy, int dx){
     if(dy != -1 && dy != 0 && dy != 1) return false;
     if(dx != -1 && dx != 0 && dx != 1) return false;
@@ -155,4 +154,3 @@ bool update(struct game *game, int dy, int dx){
 
     return moved;
 }
-
