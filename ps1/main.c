@@ -5,10 +5,10 @@
 #include "bmp.h"
 
 int main(){
-    unsigned char *bmp_encrypted; 
+    unsigned char *bmp_encrypted;
     char *bmp_decrypted;
     bmp_encrypted = bmp_encrypt("Wow", "Hello world!");
-    for(int i=0; i < 12;i++) {
+    for(int i=0; i < 12; i++) {
         printf("%x ", bmp_encrypted[i]);
     }
     putchar('\n');
@@ -16,4 +16,6 @@ int main(){
     printf("%s\n", bmp_decrypted);
     free(bmp_encrypted);
     free(bmp_decrypted);
+
+    return 0;
 }

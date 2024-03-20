@@ -107,6 +107,8 @@ unsigned char* bit_encrypt(const char* text){
     return encrypted;
 }
 
+
+
 char* bit_decrypt(const unsigned char* text){
     if(text == NULL){
         return NULL;
