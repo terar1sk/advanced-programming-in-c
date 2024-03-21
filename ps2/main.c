@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include "k.h"
+#include "hof.h"
 #include "ui.h"
 
 int main() {

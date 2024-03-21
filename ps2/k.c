@@ -62,26 +62,32 @@ bool is_move_possible(const struct game game){
 
 
 bool update(struct game *game, int dy, int dx){
-    if(dy != -1 && dy != 0 && dy != 1) return false;
-    if(dx != -1 && dx != 0 && dx != 1) return false;
-    if(dy != 0 && dx != 0) return false;
-
-    bool moved = false;
+    if(dy != -1 && dy != 0 && dy != 1){
+      return false;
+    }
+    if(dx != -1 && dx != 0 && dx != 1){
+      return false;
+    }
+    if(dy != 0 && dx != 0){
+      return false;
+    }
+  
+    bool move = false;
 
     if(dy == 1){
-        for(int j = 0; j < SIZE; ++j){
-            for(int i = 1; i < SIZE; ++i){
-                for(int k = i; k > 0; --k){
-                    if(game->board[k][j] == ' '){
-                        game->board[k][j] = game->board[k - 1][j];
-                        game->board[k - 1][j] = ' ';
-                        moved = true;
+        for(int a = 0; a < SIZE; ++a){
+            for(int b = 1; b < SIZE; ++b){
+                for(int c = a; c > 0; --c){
+                    if(game->board[c][b] == ' '){
+                        game->board[c][b] = game->board[c - 1][b];
+                        game->board[c - 1][b] = ' ';
+                        move = true;
                     }
-                    else if(game->board[k][j] == game->board[k - 1][j]){
-                        game->board[k][j]++;
-                        game->score += 1 << (game->board[k][j] - 'A');
-                        game->board[k - 1][j] = ' ';
-                        moved = true;
+                    else if(game->board[c][b] == game->board[c - 1][b]){
+                        game->board[c][b]++;
+                        game->score += 1 << (game->board[c][b] - 'A');
+                        game->board[c - 1][b] = ' ';
+                        move = true;
                         break;
                     }
                 }
@@ -90,19 +96,19 @@ bool update(struct game *game, int dy, int dx){
     }
 
     if(dy == -1){
-        for(int j = 0; j < SIZE; ++j){
-            for(int i = SIZE - 2; i >= 0; --i){
-                for(int k = i; k < SIZE - 1; ++k){
-                    if(game->board[k][j] == ' '){
-                        game->board[k][j] = game->board[k + 1][j];
-                        game->board[k + 1][j] = ' ';
-                        moved = true;
+        for(int b = 0; b < SIZE; ++b){
+            for(int a = SIZE - 2; a >= 0; --a){
+                for(int c = a; c < SIZE - 1; ++c){
+                    if(game->board[c][b] == ' '){
+                        game->board[c][b] = game->board[c + 1][b];
+                        game->board[c + 1][b] = ' ';
+                        move = true;
                     }
-                    else if(game->board[k][j] == game->board[k + 1][j]){
-                        game->board[k][j]++;
-                        game->score += 1 << (game->board[k][j] - 'A');
-                        game->board[k + 1][j] = ' ';
-                        moved = true;
+                    else if(game->board[c][b] == game->board[c + 1][b]){
+                        game->board[c][b]++;
+                        game->score += 1 << (game->board[c][b] - 'A');
+                        game->board[c + 1][b] = ' ';
+                        move = true;
                         break;
                     }
                 }
@@ -111,19 +117,19 @@ bool update(struct game *game, int dy, int dx){
     }
 
     if(dx == 1){
-        for(int i = 0; i < SIZE; ++i){
-            for(int j = 1; j < SIZE; ++j){
-                for(int k = j; k > 0; --k){
-                    if(game->board[i][k] == ' '){
-                        game->board[i][k] = game->board[i][k - 1];
-                        game->board[i][k - 1] = ' ';
-                        moved = true;
+        for(int a = 0; a < SIZE; ++a){
+            for(int b = 1; b < SIZE; ++b){
+                for(int c = b; c > 0; --c){
+                    if(game->board[a][c] == ' '){
+                        game->board[a][c] = game->board[a][c - 1];
+                        game->board[a][c - 1] = ' ';
+                        move = true;
                     }
-                    else if(game->board[i][k] == game->board[i][k - 1]){
-                        game->board[i][k]++;
-                        game->score += 1 << (game->board[i][k] - 'A');
-                        game->board[i][k - 1] = ' ';
-                        moved = true;
+                    else if(game->board[a][c] == game->board[a][c - 1]){
+                        game->board[a][c]++;
+                        game->score += 1 << (game->board[a][c] - 'A');
+                        game->board[a][c - 1] = ' ';
+                        move = true;
                         break;
                     }
                 }
@@ -132,19 +138,19 @@ bool update(struct game *game, int dy, int dx){
     }
 
     if(dx == -1){
-        for(int i = 0; i < SIZE; ++i) {
-            for(int j = SIZE - 2; j >= 0; --j){
-                for(int k = j; k < SIZE - 1; ++k){
-                    if(game->board[i][k] == ' '){
-                        game->board[i][k] = game->board[i][k + 1];
-                        game->board[i][k + 1] = ' ';
-                        moved = true;
+        for(int a = 0; a < SIZE; ++a) {
+            for(int b = SIZE - 2; b >= 0; --b){
+                for(int c = b; c < SIZE - 1; ++c){
+                    if(game->board[a][c] == ' '){
+                        game->board[a][c] = game->board[a][c + 1];
+                        game->board[a][c + 1] = ' ';
+                        move = true;
                     }
-                    else if(game->board[i][k] == game->board[i][k + 1]){
-                        game->board[i][k]++;
-                        game->score += 1 << (game->board[i][k] - 'A');
-                        game->board[i][k + 1] = ' ';
-                        moved = true;
+                    else if(game->board[a][c] == game->board[a][c + 1]){
+                        game->board[a][c]++;
+                        game->score += 1 << (game->board[a][c] - 'A');
+                        game->board[a][c + 1] = ' ';
+                        move = true;
                         break;
                     }
                 }
@@ -152,5 +158,5 @@ bool update(struct game *game, int dy, int dx){
         }
     }
 
-    return moved;
+    return move;
 }
