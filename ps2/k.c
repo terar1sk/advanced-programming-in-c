@@ -68,7 +68,7 @@ bool update(struct game *game, int dy, int dx){
 
     bool moved = false;
 
-    if(dy == -1){
+    if(dy == 1){
         for(int j = 0; j < SIZE; ++j){
             for(int i = 1; i < SIZE; ++i){
                 for(int k = i; k > 0; --k){
@@ -89,7 +89,7 @@ bool update(struct game *game, int dy, int dx){
         }
     }
 
-    if(dy == 1){
+    if(dy == -1){
         for(int j = 0; j < SIZE; ++j){
             for(int i = SIZE - 2; i >= 0; --i){
                 for(int k = i; k < SIZE - 1; ++k){
@@ -110,7 +110,7 @@ bool update(struct game *game, int dy, int dx){
         }
     }
 
-    if(dx == -1){
+    if(dx == 1){
         for(int i = 0; i < SIZE; ++i){
             for(int j = 1; j < SIZE; ++j){
                 for(int k = j; k > 0; --k){
@@ -131,7 +131,7 @@ bool update(struct game *game, int dy, int dx){
         }
     }
 
-    if(dx == 1){
+    if(dx == -1){
         for(int i = 0; i < SIZE; ++i) {
             for(int j = SIZE - 2; j >= 0; --j){
                 for(int k = j; k < SIZE - 1; ++k){
