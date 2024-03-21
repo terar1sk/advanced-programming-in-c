@@ -46,9 +46,10 @@ bool add_player(struct player list[], int *size, const struct player new_player)
     }
 
     int ins_ind = 0;
-    while(ins_ind < *size && (new_player.score > list[ins_ind].score || (new_player.score == list[ins_ind].score && strcmp(new_player.name, list[ins_ind].name) < 0))){
+    while(ins_ind < *size && (new_player.score > list[ins_ind].score || (new_player.score == list[ins_ind].score && strcmp(new_player.name, list[ins_ind].name) > 0))){
           ins_ind++;
     }
+
     if(*size < MAX_ENTRIES){
         for(int a = *size; a > ins_ind; a--){
             list[a] = list[a - 1];
@@ -57,14 +58,15 @@ bool add_player(struct player list[], int *size, const struct player new_player)
         (*size)++;
         return true;
     }
-    if(ins_ind >= MAX_ENTRIES){
-        return false;
+    else{
+        if(new_player.score > list[MAX_ENTRIES - 1].score || (new_player.score == list[MAX_ENTRIES - 1].score && strcmp(new_player.name, list[MAX_ENTRIES - 1].name) > 0)){
+            list[MAX_ENTRIES - 1] = new_player;
+            return true;
+        }
+        else{
+            return false;
+        }
     }
-    for(int a = MAX_ENTRIES - 1; a > ins_ind; a--){
-        list[a] = list[a - 1];
-    }
-    list[ins_ind] = new_player;
-
-    return true;
 }
+
 
