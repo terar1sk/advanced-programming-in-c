@@ -1,30 +1,30 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-int sumnum(int a){
-    int sum = 0;
-    while(a > 0){
-        sum += a % 10;
-        a /= 10;
-    }
-    return sum;
-}
-
-int mm(int a){
-    while(a >= 10){
-      a = sumnum(a);
-    }
-    return a;
-}
-
-/*
 int main(){
-    int num;
-    scanf("%d", &num);
+char n[199999];
+int board[199999];
+long long int k=0;
 
-    int result = mm(num);
-    printf("%d\n", result);
+scanf("%199999[^\n]", n);
+int len = strlen(n);
 
+for(int a=0; a< len; a++){
+	board[a] = n[a]-'0';
+	k=k+board[a];
+}
+
+int rez = 0;
+    while(k >= 10){
+        for(int i = k; i > 0; i/=10){
+	    rez += i%10;
+	}
+	k = rez;
+	rez = 0;
+    }
+
+    printf("%lld\n",k);
     return 0;
 }
-*/
 
