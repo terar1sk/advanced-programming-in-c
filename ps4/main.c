@@ -4,6 +4,8 @@
 #include "bmp.h"
 #include "transformations.h"
 
+struct pixel* read_data(FILE* stream, const struct bmp_header* header);
+
 int main(){
   const char *a = "M:/Computer/Home/prog-9313/ps4/assets/denzil.bmp";
   FILE *stream = fopen(a,"rb+");
@@ -11,7 +13,7 @@ int main(){
   if(write_bmp(stream,image)){
     free_bmp_image(image);
   }
-  printf("data size:%llu\n", sizeof(*image));
+  printf("data size:%lu\n", sizeof(*image));
   printf("Done\n");
 
   struct bmp_image *fh;
@@ -40,6 +42,8 @@ int main(){
   free(scaled);
   free(trimmed);
   free(produced);
+
+  free_bmp_image(image);
   return 0;
 }
 
