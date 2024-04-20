@@ -219,17 +219,26 @@ struct bmp_image* extract(const struct bmp_image* image, const char* colors_to_k
     free(new_image->header);
     free(new_image);
     return NULL;
-  }
+  } 
   int width = image->header->width;
   int height = image->header->height;
   int new_size = 0;
   for(int a = 0; a < height; a++){
     for(int b = 0; b < width; b++){
       struct pixel current_pixel = image->data[a * width + b];
-      char* color_ptr = strchr(colors_to_keep, current_pixel.color);
-      if(color_ptr != NULL){
-        new_image->data[new_size++] = current_pixel;
+      char* color_to_keep_ptr = strchr(colors_to_keep, 'b');
+      if(color_to_keep_ptr != NULL){
+        new_image->data[new_size].blue = current_pixel.blue;
       }
+      color_to_keep_ptr = strchr(colors_to_keep, 'g');
+      if(color_to_keep_ptr != NULL){
+        new_image->data[new_size].green = current_pixel.green;
+      }
+      color_to_keep_ptr = strchr(colors_to_keep, 'r');
+      if(color_to_keep_ptr != NULL){
+        new_image->data[new_size].red = current_pixel.red;
+      }
+      new_size++;
     }
   }
   new_image->header->image_size = new_size;
