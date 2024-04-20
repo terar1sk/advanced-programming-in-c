@@ -33,37 +33,29 @@ struct bmp_header* read_bmp_header(FILE* stream){
   if(header == NULL){
     return NULL;
   }
-  header->size = (unsigned int) R4(stream);
-  header->width = (int) R4(stream);
-  header->height = (int) R4(stream);
-  header->planes = (unsigned short) R2(stream);
-  header->compression = (unsigned int) R4(stream);
-  header->image_size = (unsigned int) R4(stream);
-  header->x_ppm = (int) R4(stream);
-  header->y_ppm = (int) R4(stream);
-  header->num_colors = (unsigned int) R4(stream);
-  header->important_colors = (unsigned int) R4(stream);
+  fread(header, sizeof(struct bmp_header), 1, stream);
   return header;
 }
 
 struct bmp_image* read_bmp(FILE* stream){
-  struct bmp_header *header = read_bmp_header(stream);
-  if(header == NULL){
-    fprintf(stdout,"Error: Corrupted BMP file.\n");
+  if(stream == NULL){
     return NULL;
   }
-  else if(header->type != 0x424D){
-    fprintf(stdout,"Error: This is not a BMP file.\n");
+  struct bmp_header* header = read_bmp_header(stream);
+  if(header == NULL){
+    return NULL;
+  }
+  if(header->type != 0x4D42){
     free(header);
     return NULL;
   }
-  struct bmp_image *image = malloc(sizeof(struct bmp_image));
+  struct bmp_image* image = malloc(sizeof(struct bmp_image));
   if(image == NULL){
     free(header);
     return NULL;
   }
   image->header = header;
-  image->data = malloc(sizeof(struct pixel) * header->image_size);
+  image->data = read_data(stream, header);
   if(image->data == NULL){
     free(header);
     free(image);
@@ -85,11 +77,13 @@ struct pixel* read_data(FILE* stream, const struct bmp_header* header){
   if(stream == NULL || header == NULL){
     return NULL;
   }
-  struct pixel *pixel = malloc(sizeof(struct pixel) * header->height * header->width);
-  if(pixel == NULL){
+  size_t image_size = header->image_size;
+  struct pixel* pixels = malloc(image_size);
+  if(pixels == NULL){
     return NULL;
   }
-  return pixel;
+  fread(pixels, sizeof(struct pixel), image_size, stream);
+  return pixels;
 }
 
 void free_bmp_image(struct bmp_image* image){
