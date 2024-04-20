@@ -3,27 +3,27 @@
 #include <stdlib.h>
 #include "bmp.h"
 
-unsigned short R2(FILE *fp){
-  unsigned short reply = 0;
-  unsigned char cb[2];
-    int a;
-    fread(cb, 1, 2, fp);
-    for(a = 1; a >= 0; a--){
-        reply = (reply << 8) | (unsigned short) cb[a];
-    }
-  return reply;
-}
+// unsigned short R2(FILE *fp){
+//   unsigned short reply = 0;
+//   unsigned char cb[2];
+//     int a;
+//     fread(cb, 1, 2, fp);
+//     for(a = 1; a >= 0; a--){
+//         reply = (reply << 8) | (unsigned short) cb[a];
+//     }
+//   return reply;
+// }
 
-unsigned int R4(FILE *fp){
-  unsigned int reply = 0;
-  unsigned char cb[4];
-    int a;
-    fread(cb, 1, 4, fp);
-    for(a = 3; a >= 0; a--){
-      reply = (reply << 8) | (unsigned int) cb[a];
-    }
-  return reply;
-}
+// unsigned int R4(FILE *fp){
+//   unsigned int reply = 0;
+//   unsigned char cb[4];
+//     int a;
+//     fread(cb, 1, 4, fp);
+//     for(a = 3; a >= 0; a--){
+//       reply = (reply << 8) | (unsigned int) cb[a];
+//     }
+//   return reply;
+// }
 
 struct bmp_header* read_bmp_header(FILE* stream){
   if(stream == NULL){
@@ -33,8 +33,11 @@ struct bmp_header* read_bmp_header(FILE* stream){
   if(header == NULL){
     return NULL;
   }
-  fread(header, sizeof(struct bmp_header), 1, stream);
-  return header;
+  if(fread(header, sizeof(struct bmp_header), 1, stream) != 1){
+        free(header);
+        return NULL;
+    }
+    return header;
 }
 
 struct bmp_image* read_bmp(FILE* stream){
@@ -68,8 +71,12 @@ bool write_bmp(FILE* stream, const struct bmp_image* image){
   if(stream == NULL || image == NULL){
     return false;
   }
-  fwrite(image->header, sizeof(struct bmp_header), 1, stream);
-  fwrite(image->data, sizeof(struct pixel), image->header->image_size, stream);
+  if(fwrite(image->header, sizeof(struct bmp_header), 1, stream) != 1){
+    return false;
+  }
+  if(fwrite(image->data, sizeof(struct pixel), image->header->image_size, stream) != image->header->image_size){
+    return false;
+  }
   return true;
 }
 
@@ -82,7 +89,10 @@ struct pixel* read_data(FILE* stream, const struct bmp_header* header){
   if(pixels == NULL){
     return NULL;
   }
-  fread(pixels, sizeof(struct pixel), image_size, stream);
+  if(fread(pixels, sizeof(struct pixel), image_size, stream) != image_size){
+    free(pixels);
+    return NULL;
+  }
   return pixels;
 }
 
