@@ -138,8 +138,8 @@ struct bmp_image* scale(const struct bmp_image* image, float factor){
   if(image == NULL || factor <= 0.0f){
     return NULL;
   }
-  uint32_t new_width = (uint32_t)(image->header->width * factor);
-  uint32_t new_height = (uint32_t)(image->header->height * factor);
+  uint32_t new_width = (uint32_t)(image->header->width * factor) + 1;
+  uint32_t new_height = (uint32_t)(image->header->height * factor) + 1;
   struct bmp_image* scaled_image = (struct bmp_image*)malloc(sizeof(struct bmp_image));
   if(scaled_image == NULL){
     return NULL;
