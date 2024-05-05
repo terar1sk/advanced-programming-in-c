@@ -9,9 +9,9 @@
 
 
 struct parser* create_parser(){
-  struct parser * parser = calloc(1, sizeof(parser));
+  struct parser * parser = calloc(1, sizeof(struct parser));
   parser->commands = create_container(NULL, COMMAND, create_command("SEVER", "SEVER", "(\\s*[sS][eE][vV][eE][rR]\\s*)", 1));
-  create_container(parser->commands, COMMAND, create_command("JUH", "JUH", "\\s*[jJ][uU][hH]]\\s*", 1));
+  create_container(parser->commands, COMMAND, create_command("JUH", "JUH", "\\s*[jJ][uU][hH]\\s*", 1));
   create_container(parser->commands, COMMAND, create_command("VYCHOD", "VYCHOD", "\\s*[vV][yY][cC][hH][oO][dD]\\s*", 1));
   create_container(parser->commands, COMMAND, create_command("ZAPAD", "ZAPAD", "\\s*[zZ][aA][pP][aA][dD]\\s*", 1));
   create_container(parser->commands, COMMAND, create_command("POUZI", "POUZI", "\\s*[pP][oO][uU][zZ][iI]\\s*", 1));
@@ -32,13 +32,15 @@ struct parser* create_parser(){
 }
 
 struct parser* destroy_parser(struct parser* parser){
-  if(parser->commands!=NULL){
-    parser->commands=destroy_containers(parser->commands->next);
+  if(parser != NULL){
+    if(parser->commands != NULL){
+      destroy_containers(parser->commands);
+    }
+    if(parser->history != NULL){
+      destroy_containers(parser->history);
+    }
+    free(parser);
   }
-  if(parser->history==NULL){
-    parser->history=destroy_containers(parser->history->next);
-  }
-  free(parser);
   return NULL;
 }
 
@@ -47,11 +49,12 @@ struct command* parse_input(struct parser* parser, char* input){
     return NULL;
   }
   else{
-    while(parser->commands != NULL && parser->commands->command != NULL){
-      if(regexec(&parser->commands->command->preg, input, 0, NULL, REG_ICASE) != REG_NOMATCH){
-        return parser->commands->command;
+    struct container* current_command = parser->commands;
+    while(current_command != NULL && current_command->command != NULL){
+      if(regexec(&current_command->command->preg, input, 0, NULL, REG_ICASE) != REG_NOMATCH){
+        return current_command->command;
       }
-      parser->commands = parser->commands->next;
+      current_command = current_command->next;
     }
     return NULL;
   }
