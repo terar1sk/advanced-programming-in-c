@@ -5,7 +5,7 @@
 ![Project](https://img.shields.io/badge/Type-Academic-success)
 ![Status](https://img.shields.io/badge/status-completed-brightgreen)
 
-# 💻 Advanced Programming (2026)
+# 💻 Advanced Programming
 
 Academic project developed at **Technical University of Košice - Faculty of Electrical Engineering and Informatics (FEI TUKE)** as part of the *Programming* course focused on advanced programming concepts in **C and C++**.
 
